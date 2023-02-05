@@ -1,0 +1,35 @@
+---
+- name: wildfly on ubuntu
+  hosts: all
+  becomes: yes
+  tasks: 
+    - name: install default jdk
+      ansible.builtin.apt:
+        name: default-jdk
+        state: latest
+        update_cache: yes
+    - name: groupadd to wildfly
+      ansible.builtin.group:
+        name: wildfly
+        state: present
+    - name: useradd wildfly
+      ansible.builtin.user:
+        name: wildfly
+        state: present
+        home: /opt/wildfly/
+        shell: /sbin/nologin
+    - name: install wildfly        
+      ansible.builtin.get_url:
+        url: https://download.jboss.org/wildfly/16.0.0.Final/wildfly-16.0.0.Final.tar.gz
+        dest: /tmp/wildfly-16.0.0.Final.tar.gz
+    - name: extract the file
+      ansible.builtin.unarchive:
+        src: tmp/wildfly-16.0.0.final.tar.gz
+        remote_src: true
+        dest: /opt/wildfly/
+    - name: copy the file
+      ansible.builtin.copy:
+        src:
+        dest:
+        remote_src: true        
+        

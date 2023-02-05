@@ -1,0 +1,35 @@
+---
+- name: install java 13 on ubuntu 
+  hosts: all
+  become: yes
+  tasks:
+    - name: create  a tar file 
+      ansible.builtin.get_url:
+        url: https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz 
+        dest: /home/ansible
+    - name: create a directory
+      ansible.builtin.file:
+        path: /usr/java 
+        state: directory
+        mode: '777'
+    - name: copy a file 
+      ansible.builtin.copy:
+        src: /home/ansible 
+        dest: /usr/java
+    - name: Untar a file 
+      ansible.builtin.unarchive:
+        src: /usr/java/ openjdk-13.0.2_linux-x64_bin.tar.gz
+        dest: /usr/java
+    - name: data in etc/profile  
+      ansible.builtin.blockinfile:        
+        block: | 
+          JAVA_HOME=/usr/java/jdk-13.0.2
+          PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+          export JAVA_HOME
+          export PATH    
+        path: etc/profile 
+    - name: command in line
+      ansible.builtin.command: sudo update-alternatives --install "/usr/bin/java" "java" "/usr/java/jdk-13.0.2/bin/java" 1
+    - name: command in line
+      ansible.builtin.command: sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/java/jdk-13.0.2/bin/javac" 1      
+     

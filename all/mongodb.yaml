@@ -1,0 +1,23 @@
+- name: install mongodb 
+  hosts: all
+  become: yes
+  tasks: 
+    - name: mongodb 
+      ansible.builtin.apt: 
+        name: 
+          - gnupg2 
+          - software-properties-common  
+          - apt-transport-https  
+          - ca-certificates  
+          - lsb-release
+        state: latest
+        update_cache : true
+    - name: curl
+      ansible.builtin.uri:
+        url: https://www.mongodb.org/static/pgp/server-6.0.asc
+    - name: gpg key 
+      ansible.builtin.rpm_key:
+        key:  /etc/apt/trusted.gpg.d/mongodb-6.gpg 
+        state: present
+    - name: command in line 
+      ansible.builtin.command: sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/mongodb-6.gpg

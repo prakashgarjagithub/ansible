@@ -1,0 +1,28 @@
+> create ec2 instance								> Node  
+  > ansible master								> sudo vi /etc/ssh/sshd_config
+  > node														
+> Sudo vi /etc/ssh/sshd_config							> Sudo systemctl restart sshd 		
+> sudo systemctl restart sshd							> Sudo adduser ansible
+> sudo adduser ansible
+> sudo visudo  = ansible ALL=(ALL:ALL) NOPASSWD:ALL				> sudo visudo  = ansible ALL=(ALL:ALL) NOPASSWD:ALL
+> su ansible
+> cd ~
+> vi inventory = node ipaddress private
+> ssh-keygen
+> ssh-copy-id ansible@Node Private Address
+> sudo apt update
+> sudo apt install software-properties-common
+> sudo add-apt-repository --yes --update ppa:ansible/ansible
+> sudo apt install ansible
+> ansible -i hosts -m ping all
+> vi apache.yaml
+  name: install apache server on ubuntu
+  hosts: all
+  become: yes
+  tasks:
+    - name: install apache2
+      ansible.builtin.apt:
+        name: apache2
+        update_cache: yes
+        state: present
+>ansible-playbook -i inventory apache.yaml '

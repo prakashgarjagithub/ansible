@@ -1,0 +1,22 @@
+---
+- name: install apache server
+  hosts: all
+  become: yes
+  tasks:
+    - name: install apache on ubuntu
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+    - name: install java
+      ansible.builtin.apt:
+        name: openjdk-11-jdk
+        state: present
+    - name: install php
+      ansible.builtin.apt:
+        name:
+          - php        
+          - libapache-mod-php
+          - php-mysql
+          - sudo nano /var/www/html/info.php
+        state: present
+          

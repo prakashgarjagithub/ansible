@@ -1,0 +1,10 @@
+---
+- name: installing nodejs
+  hosts: all
+  become: yes
+  tasks:
+    - name: install nodejs
+      ansible.builtin.apt:
+        name: nodejs
+        state: present
+        

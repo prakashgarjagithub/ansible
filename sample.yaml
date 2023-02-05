@@ -1,0 +1,25 @@
+---
+- name: installing tomcat on 
+  become: yes 
+  host: all 
+  tasks:
+    - name: install java 11
+      ansible.builtin.apt:
+        name: openjdk-11-jdk
+        update_cache: yes
+        state: present
+    - name: create a tomcat user
+      ansible.builtin.user:
+        name: tomcat
+        group: tomcat
+        home: /opt/tomcat
+        shell: /bin/false
+        state: present
+    - name: install tomcat   
+      ansible.builtin.get.url:
+        url: https://www-eu.apache.org/dist/tomcat/tomcat-9/v10.1.5/bin/apache-tomcat-10.1.5.tar.gz
+        dest: /tmp/apache-tomcat-10.1.5.tar.gz
+    - name: untar a file
+      ansible.builtin.unarchive: 
+        src: /tmp/apache-tomcat-10.1.5.tar.gz 
+        remote_src: yes

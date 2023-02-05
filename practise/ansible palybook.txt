@@ -1,0 +1,36 @@
+---
+- name: ansible
+  hosts: all
+  become: yes 
+  tasks: 
+- name: install apache server on ubuntu
+  hosts: all
+  become: yes  
+  tasks: 	  
+    - name: install apache2
+	  ansible.builtin.apt:
+	    name: apache2 
+		update_cache: yes
+		state: present
+- name: Install tomcat 10 on ubuntu 20
+  hosts: all
+  become: yes
+  tasks:
+    - name: java installation
+      ansible.builtin.apt:
+        name: openjdk-11-jdk
+        update_cache: yes
+        state: present 	  
+- name: install
+  hosts: all
+  become: yes
+  tasks: 
+    - name:
+	  ansible.builtin.apt:
+	  name:
+	  update_cache:yes
+	  state: present
+	  
+	  
+	  
+		

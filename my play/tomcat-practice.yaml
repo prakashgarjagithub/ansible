@@ -1,0 +1,74 @@
+---
+- name: tomcat 10 on ubuntu
+  hosts: all
+  become: yes
+  tasks:
+    - name: install openjdk-11-jdk
+      ansible.builtin.apt:
+        name: openjdk-11-jdk
+        state: latest
+        update_cache: true
+    - name: useradd tomcat
+      ansible.builtin.user:
+        name: tomcat
+        state: present
+        home: /opt/tomcat
+        shell: /bin/false
+    - name: install tomcat
+      ansible.builtin.get_url:
+        url:  https://www-eu.apache.org/dist/tomcat/tomcat-10/v10.1.5/bin/apache-tomcat-10.1.5.tar.gz
+        dest: /tmp/apache-tomcat-10.1.5.tar.gz
+    - name: extract the file
+      ansible.builtin.unarchive:
+        src: /tmp/apache-tomcat-10.1.5.tar.gz
+        remote_src: true
+        dest: /opt/tomcat/
+    - name: copy the file or symbolic link
+      ansible.builtin.copy:
+        src: /opt/tomcat/apache-tomcat-10.1.5
+        dest: /opt/tomcat/latest
+        remote_src: true
+    - name: change ownership in user and group
+      ansible.builtin.file:
+        group: tomcat
+        owner: tomcat
+        path: /opt/tomcat
+        recurse: true
+    - name: execute the script shellcommand
+      ansible.builtin.file:
+        path: /opt/tomcat/latest/bin/
+        owner: tomcat
+        mode: '777'
+        recurse: yes
+    - name: create a file 
+      ansible.builtin.file:
+        path: /etc/systemd/system/tomcat.service
+        state: touch 
+    - name: copy the file
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/tomcat.service
+        content: |
+            [Unit]
+            Description=Tomcat 10 servlet container
+            After=network.target
+            [Service]
+            Type=forking
+            User=tomcat
+            Group=tomcat
+            Environment="JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64"
+            Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom -Djava.awt.headless=true"
+            Environment="CATALINA_BASE=/opt/tomcat/latest"
+            Environment="CATALINA_HOME=/opt/tomcat/latest"
+            Environment="CATALINA_PID=/opt/tomcat/latest/temp/tomcat.pid"
+            Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
+            ExecStart=/opt/tomcat/latest/bin/startup.sh
+            ExecStop=/opt/tomcat/latest/bin/shutdown.sh
+            [Install]
+            WantedBy=multi-user.target 
+          
+    - name: reload the daemon
+      ansible.builtin.systemd:
+        name: tomcat.service
+        daemon_reload: yes
+        enabled: yes
+        state: restarted

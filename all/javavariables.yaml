@@ -1,0 +1,55 @@
+---
+- name: install java server on ubuntu
+  hosts: all
+  become: yes
+  vars:
+    java_version: "openjdk-11-jdk"
+    java1_version: "openjdk-17-jdk"
+  tasks: 
+    - name: install java
+      ansible.builtin.apt:
+        name: "{{ java_version }}"
+        state: latest
+        update_cache : true
+      when:
+        - ansible_facts['hostname'] == "ip-172-31-0-195"
+    - name: install java
+      ansible.builtin.apt:
+        name: "{{ java1_version }}"
+        state: latest
+        update_cache : true 
+      when:
+        - ansible_facts['hostname'] == "ip-172-31-0-567"
+    - name: wget the file
+      ansible.builtin.get_url:
+        dest: /tmp 
+        url: https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_linux-x64_bin.tar.gz
+      when:
+        - ansible_facts['hostname'] == "ip-172-31-0-599"  
+    - name: make directory
+      ansible.builtin.file:
+        path: /usr/java
+        state: directory
+    - name: copy the file 
+      ansible.builtin.copy:
+        dest: /usr/java
+        src: /tmp
+        remote_src: true
+    - name: extract tar file 
+      ansible.builtin.unarchive:
+        dest: /usr/java
+        src: /tmp/openjdk-13_linux-x64_bin.tar.gz
+        remote_src: true
+    - name: edit the data in /etc/profile
+      ansible.builtin.blockinfile:
+        block: 
+          # Java 13
+          JAVA_HOME=/usr/java/jdk-13
+          PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+          export JAVA_HOME
+          export PATH
+        path: /etc/profile
+    - name: command in line 
+      ansible.builtin.command: sudo update-alternatives --install "/usr/bin/java" "java" "/usr/java/jdk-13/bin/java" 1
+    - name: command in line 
+      ansible.builtin.command: sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/java/jdk-13/bin/javac" 1

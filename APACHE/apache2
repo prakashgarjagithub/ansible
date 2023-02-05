@@ -1,0 +1,16 @@
+---
+- name: apache2
+  hosts: local hosts
+  become: all
+  tasks: 
+    - name: install apache2 server 
+      ansible.builtin.apt:
+        name:  apache2
+        update_cache: yes
+        state: latest 
+    - name: install openjdk-11-jdk
+      ansible.builtin.apt:
+        name: openjdk-11-jdk
+        state: latest
+        update_cache: true     
+   
