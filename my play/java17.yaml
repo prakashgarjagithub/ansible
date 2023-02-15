@@ -1,0 +1,11 @@
+---
+- name: install java server on ubuntu
+  hosts: all
+  become: yes
+  tasks: 
+    - name: install java
+      ansible.builtin.apt:
+        name: openjdk-17-jdk
+        state: latest
+        update_cache : true
+    

@@ -1,3 +1,4 @@
+---
 - name: tomcat 10 on ubuntu
   hosts: all
   become: yes
