@@ -3,20 +3,20 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
+---
+pool:
+  name: 'default'
+  vmImage: 'ubuntu-latest'
 trigger:
 - main
 
-pool:
-  name: 'default' 
-  vmImage: ubuntu-latest
-
 steps:
-- task: NodeTool@0
+- task: Maven@3
   inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
-
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+    mavenPomFile: 'pom.xml'
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    javaHomeOption: 'path'
+    jdkDirectory:  /usr/lib/jvm/java-17-openjdk-amd64
+    goals: 'package'
+    mavenVersionOption: 'path'
+    mavenDirectory: /usr/share/maven
