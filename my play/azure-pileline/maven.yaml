@@ -1,0 +1,56 @@
+---
+pool: 
+  name: maven@3
+  VmImage: 'ubuntu-latest'
+
+trigger:
+  - main
+
+parameters:
+  - name: Maven@3
+    displayname: maven
+    type: string
+    default:   
+  - name: build java
+    displayname: java
+    type: string
+    default: 'package'
+  - name:    
+
+
+
+
+
+
+
+
+
+
+
+
+
+steps: 
+  - task: Maven@3
+    inputs:
+      mavenPOMFile: 'pom.xml'
+      goals: 'package'
+      publishJUnitResults: yes
+      testResultsFiles: '*/surefire-reports/TEST-*.xml'
+      jdkVersionOption: '1.17' 
+      jdkDirectory: path
+      jdkArchitectureOption: /usr/lib/jvm/java-17-openjdk-amd64
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
