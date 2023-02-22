@@ -1,0 +1,44 @@
+---
+pool:
+  name: "Azure devops"
+  vmImage: Ubuntu-latest
+trigger:
+  - main:
+stages:
+- stage: A
+  jobs:
+  - job: shop
+    displayname: 'My workshop'
+    steps: 
+      - script: "echo workshop"
+      - script: "echo workshop"
+  jobs:
+  - job: shop
+    steps: 
+    - script: "echo workshop"
+    - script: "echo workshop"
+- stages: B
+  jobs:
+    - job: devops1
+       steps:
+       - script: 'echo devops'
+       - script: 'echo devops'
+  jobs:
+    - job: Azure1
+       steps:
+       - script: 'echo Azure'
+       - script: 'echo Azure'
+- stages: C
+  jobs:
+    - job: devops1
+       steps:
+       - script: 'echo devops'
+       - script: 'echo devops'
+  jobs:
+    - job: Azure2
+       steps:
+       - script: 'echo Azure'
+       - script: 'echo Azure'
+  
+
+

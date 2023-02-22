@@ -2,18 +2,16 @@
 pool:
    name: 'Azure-pipeline'
    vmImage: 'ubuntu-latest'
-
+  
 trigger:
   - main   
 steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '20.04'
-  displayName:'install and build' 
+      displayName:'install and build' 
 
 - script: |
     npm install
   display name: 'npm install'  
-- script: |
-    npm build
-  display name: 'npm build'         
+      

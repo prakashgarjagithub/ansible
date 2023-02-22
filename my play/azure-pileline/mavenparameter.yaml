@@ -1,0 +1,50 @@
+---
+pool: 
+  name: Azure pipeline
+  vmImages: ubuntu-latest
+
+trigger:
+  - main:
+
+parameters:
+  - name: goal
+    displayname: 'maven goal'
+    type: string
+    default: package
+    values:
+      - install
+      - package
+      - compile
+      - clean 
+  - name: mavenPOMFile
+    displayname: buildmavenPOMFile
+    type: string
+    default: 'pom.xml'
+
+  - name: jdkVersionOption
+    displayname: javaversion
+    type: string
+    default: '1.17'
+
+steps: 
+  - task: Maven@3
+    inputs:
+      mavenPOMFile: ${{ parameters.mavenPOMFile }}
+      goals: ${{ parameters.'maven goal' }}
+      publishJUnitResults: yes
+      testResultsFiles: '*/surefire-reports/TEST-*.xml'
+      jdkVersionOption: ${{ parameters.jdkVersionOption }}
+      javaHomeOption: path
+      jdkDirectory: /usr/lib/jvm/java-17-openjdk-amd64
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,23 @@
+---
+pool:
+  name: 'Azure pipelines'
+  vmImage: Ubuntu-latest
+
+trigger:
+  - main
+
+steps: 
+  - task: Maven@3
+    inputs:
+      mavenPOMFile: 'pom.xml'
+      goals: 'package'
+      publishJUnitResults: yes
+      testResultsFiles: '*/surefire-reports/TEST-*.xml'
+      jdkVersionOption: '1.17' 
+      jdkDirectory: path
+      jdkArchitectureOption: /usr/lib/jvm/java-17-openjdk-amd64
+      
+        
+
+
+        
